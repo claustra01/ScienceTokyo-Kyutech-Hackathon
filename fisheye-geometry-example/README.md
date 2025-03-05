@@ -1,15 +1,5 @@
-# sciencetokyo-kyutech-hackathon
+# 魚眼画像を球面にマッピングするサンプル
 
-To install dependencies:
+Bun を事前に入れておいてください
 
-```bash
-bun install
-```
-
-To run:
-
-```bash
-bun run index.ts
-```
-
-This project was created using `bun init` in bun v1.2.4. [Bun](https://bun.sh) is a fast all-in-one JavaScript runtime.
+`bun i` で依存関係のインストールをして `bun run -w index.ts` をするとだいたいうまく行きます。
