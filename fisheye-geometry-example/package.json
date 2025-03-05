@@ -1,0 +1,16 @@
+{
+  "dependencies": {
+    "@types/three": "^0.174.0",
+    "three": "^0.174.0"
+  },
+  "name": "sciencetokyo-kyutech-hackathon",
+  "module": "index.ts",
+  "type": "module",
+  "private": true,
+  "devDependencies": {
+    "@types/bun": "latest"
+  },
+  "peerDependencies": {
+    "typescript": "^5"
+  }
+}
