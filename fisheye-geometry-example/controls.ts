@@ -12,11 +12,16 @@ export let deviceOrientationControls: DeviceOrientationControls | null = null;
 
 window.addEventListener("DOMContentLoaded", async () => {
   if (window.DeviceOrientationEvent === undefined) {
-    alert("このデバイスはジャイロセンサーに対応していません");
+    console.log("このデバイスはジャイロセンサーに対応していません");
     return;
   }
 
-  // iOS 13+ では明示的な許可が必要
+  // 現在のデバイスがモバイルデバイス（Android/iOS）かを判定
+  const isMobile = /Android|iPhone|iPad|iPod/i.test(navigator.userAgent);
+  if (!isMobile) {
+    console.log("このデバイスはモバイルデバイスではありません");
+    return;
+  }
   if (typeof window.DeviceOrientationEvent.requestPermission === "function") {
     const state = await window.DeviceOrientationEvent.requestPermission();
     if (state === "granted") {

@@ -106,7 +106,6 @@ class DeviceOrientationControls extends EventDispatcher {
     this.object.quaternion.setFromEuler(euler); // orient the device
     this.object.quaternion.multiply(q1); // camera looks out the back of the device, not the top
     this.object.quaternion.multiply(q0.setFromAxisAngle(zee, -orient)); // adjust for screen orientation
-    console.log(this.object);
 
     if (display) {
       display.innerText =

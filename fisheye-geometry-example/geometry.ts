@@ -1,5 +1,4 @@
 import * as THREE from "three";
-import { OrbitControls } from "three/examples/jsm/controls/OrbitControls.js";
 
 /**
  * @param {number} fovDeg 魚眼の全視野角 (度数)。例:180,200

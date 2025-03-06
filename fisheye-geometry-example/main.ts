@@ -3,15 +3,18 @@ import { OrbitControls } from "three/addons/controls/OrbitControls.js";
 import { createFisheyeGeometry } from "./geometry";
 import { deviceOrientationControls } from "./controls";
 import { camera } from "./camera";
+import { canvasElement, updateTextureFromVideo, videoElement } from "./video";
 
 // シーン、カメラ、レンダラーのセットアップ
 const scene = new THREE.Scene();
 
 const renderer = new THREE.WebGLRenderer({ antialias: true });
 renderer.setSize(window.innerWidth, window.innerHeight);
+renderer.domElement.style.position = "fixed";
+renderer.domElement.style.inset = "0";
 document.body.appendChild(renderer.domElement);
 
-let orbitControls: OrbitControls = new OrbitControls(
+const orbitControls: OrbitControls = new OrbitControls(
   camera,
   renderer.domElement,
 );
@@ -21,7 +24,7 @@ orbitControls.enableZoom = false;
 const radius: number = 5;
 const widthSegments: number = 64;
 const heightSegments: number = 32;
-const fishEyeFOV: number = 250;
+const fishEyeFOV: number = 180;
 
 // --- 球体の生成 ---
 const geometry = createFisheyeGeometry(
@@ -32,17 +35,7 @@ const geometry = createFisheyeGeometry(
 );
 geometry.scale(-1, 1, 1);
 
-// --- テクスチャ読み込みとメッシュ生成 ---
-const textureLoader = new THREE.TextureLoader();
-textureLoader.load("fisheye.jpg", (texture) => {
-  const material = new THREE.MeshBasicMaterial({ map: texture });
-  const sphereMesh = new THREE.Mesh(geometry, material);
-  scene.add(sphereMesh);
-  animate();
-});
-
-// --- アニメーションループ ---
-function animate(): void {
+const animate = () => {
   requestAnimationFrame(animate);
   if (deviceOrientationControls !== null) {
     deviceOrientationControls.update();
@@ -50,9 +43,15 @@ function animate(): void {
     orbitControls.update();
   }
   renderer.render(scene, camera);
-}
+  updateTextureFromVideo(videoElement, texture);
+};
 
-// --- ウィンドウリサイズ対応 ---
+const texture = new THREE.CanvasTexture(canvasElement);
+const material = new THREE.MeshBasicMaterial({ map: texture });
+const sphereMesh = new THREE.Mesh(geometry, material);
+scene.add(sphereMesh);
+animate();
+
 window.addEventListener("resize", () => {
   camera.aspect = window.innerWidth / window.innerHeight;
   camera.updateProjectionMatrix();

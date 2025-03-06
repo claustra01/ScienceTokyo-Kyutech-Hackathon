@@ -9,25 +9,35 @@
         padding: 0;
         overflow: hidden;
       }
+
+      #display {
+        width: 100vw;
+        height: 100vh;
+        background-color: black;
+        color: white;
+        font-size: 1.5em;
+        white-space: pre-wrap;
+        overflow: hidden;
+      }
+
+      #play-button {
+        position: fixed;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        padding: 1rem;
+        background-color: white;
+        color: black;
+        border: none;
+        font-size: 1.5em;
+        font-weight: bold;
+        z-index: 100;
+      }
     </style>
   </head>
   <body>
-    <pre
-      id="display"
-      style="
-        position: fixed;
-        top: 0;
-        left: 0;
-        background-color: #fff3;
-        color: black;
-        z-index: 1000;
-        font-size: 32px;
-        padding: 8px;
-        font-weight: bold;
-      "
-    >
-      test
-    </pre>
+    <pre id="display"></pre>
+    <button id="play-button">再生</button>
     <script src="main.ts"></script>
   </body>
 </html>

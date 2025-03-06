@@ -3,7 +3,21 @@ import app from "./index.html";
 Bun.serve({
   routes: {
     "/": app,
-    "/fisheye.jpg": new Response(await Bun.file("./fisheye.jpg").bytes()),
+    "/public/*": async (c) => {
+      const url = new URL(c.url);
+      const filePath = url.pathname.replace(/^\/public/, "./public");
+      return new Response(await Bun.file(filePath).bytes());
+    },
+    "/node_modules/*": async (c) => {
+      const url = new URL(c.url);
+      const modulePath = url.pathname.replace(
+        /^\/node_modules/,
+        "./node_modules",
+      );
+      return new Response(await Bun.file(modulePath).bytes(), {
+        headers: { "Content-Type": "application/javascript" },
+      });
+    },
   },
   port: Number(process.env.POR) || 9999,
   hostname: "0.0.0.0",
