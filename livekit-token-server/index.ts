@@ -1,5 +1,6 @@
 import { zValidator } from "@hono/zod-validator";
 import { Hono } from "hono";
+import { cors } from "hono/cors";
 import { AccessToken, Room } from "livekit-server-sdk";
 import { z } from "zod";
 
@@ -21,6 +22,7 @@ const getTokenQuerySchema = z.object({
   username: z.string(),
 });
 
+app.use(cors({ origin: "*" }));
 app.get("/getToken", zValidator("query", getTokenQuerySchema), async (c) => {
   const { room, username } = c.req.valid("query");
   return c.text(await createToken(room, username));
