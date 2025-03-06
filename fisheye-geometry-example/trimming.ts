@@ -1,6 +1,5 @@
 import { FFmpeg } from "@ffmpeg/ffmpeg";
 import { fetchFile } from "@ffmpeg/util";
-import { log } from "three/tsl";
 
 const ffmpeg = new FFmpeg();
 

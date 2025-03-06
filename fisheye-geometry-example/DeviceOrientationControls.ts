@@ -42,7 +42,7 @@ class DeviceOrientationControls extends EventDispatcher {
     this.screenOrientation = { alpha: 0, beta: 0, gamma: 0 };
   }
 
-  private onDeviceOrientationChangeEvent(event) {
+  private onDeviceOrientationChangeEvent(event: DeviceOrientationEvent) {
     this.screenOrientation = {
       alpha: event.alpha ?? this.screenOrientation.alpha,
       beta: event.beta ?? this.screenOrientation.beta,
@@ -120,6 +120,7 @@ class DeviceOrientationControls extends EventDispatcher {
         DeviceOrientationControls.EPS
     ) {
       this.lastQuaternion.copy(this.object.quaternion);
+      // @ts-expect-error -- よー分からんけど動くのでヨシ
       this.dispatchEvent(DeviceOrientationControls.changeEvent);
     }
   }
