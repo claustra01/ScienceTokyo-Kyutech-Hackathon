@@ -19,12 +19,25 @@
         font-weight: bold;
         cursor: pointer;
       }
+
+      #voice-indicator {
+        position: fixed;
+        inset: 0;
+        background-color: transparent;
+        border: 8px solid transparent;
+        z-index: 500;
+      }
+
+      #voice-indicator.active {
+        border-color: oklch(0.765 0.177 163.223);
+      }
     </style>
   </head>
   <body>
     <div class="camera-device-select-wraper">
       <select id="camera-device-select"></select>
     </div>
+    <div id="voice-indicator"></div>
     <script src="livekit-publisher.ts"></script>
   </body>
 </html>

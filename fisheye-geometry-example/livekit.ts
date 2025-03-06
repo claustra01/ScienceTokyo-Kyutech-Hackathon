@@ -17,20 +17,21 @@ const detach = () => {
   noAttachedPublisher.style.display = "block";
 };
 
+const voiceIndicator = document.getElementById("voice-indicator");
+if (!voiceIndicator) throw new Error("voice-indicator element not found");
+
 export const connectToLivekitSource = async (
   roomName: string,
   userName: string,
 ) => {
   const room = await connectToRoom(roomName, userName);
 
-  // イベントリスナーを設定
   room.on("participantConnected", handleParticipantConnected);
 
   room.on("trackPublished", (_, participant) => {
     handleParticipantConnected(participant);
   });
 
-  // 参加者が退出したときのクリーンアップ
   room.on("participantDisconnected", (participant) => {
     if (!isPublisher(participant)) return;
     const publication = [...participant.trackPublications]
@@ -41,19 +42,19 @@ export const connectToLivekitSource = async (
     detach();
   });
 
-  room.on("trackUnpublished", (_, participant) => {
-    console.log("track unpublished");
-
-    if (!isPublisher(participant)) return;
-    const publication = [...participant.trackPublications]
-      .find(([_, p]) => p.track && p.source === Track.Source.Camera);
-    if (!publication) return;
-    const [, pub] = publication;
-    pub.track?.detach(videoElement);
-    detach();
-  });
-
   room.remoteParticipants.forEach(handleParticipantConnected);
+
+  // ローカル映像を表示
+  const localParticipant = room.localParticipant;
+  await localParticipant.setMicrophoneEnabled(true);
+
+  setInterval(() => {
+    if (localParticipant.audioLevel > 0.01) {
+      voiceIndicator.classList.add("active");
+    } else {
+      voiceIndicator.classList.remove("active");
+    }
+  }, 100);
 };
 
 const handleParticipantConnected = (participant: Participant) => {

@@ -22,10 +22,23 @@
         color: #fff;
         z-index: 1000;
       }
+
+      #voice-indicator {
+        position: fixed;
+        inset: 0;
+        background-color: transparent;
+        border: 8px solid transparent;
+        z-index: 500;
+      }
+
+      #voice-indicator.active {
+        border-color: oklch(0.765 0.177 163.223);
+      }
     </style>
   </head>
   <body>
     <div id="no-attached-publisher">映像が送られていません</div>
+    <div id="voice-indicator"></div>
     <script src="main.ts"></script>
   </body>
 </html>
