@@ -21,8 +21,7 @@ const localParticipant = room.localParticipant;
 // カメラとマイクを有効化
 const devices = await navigator.mediaDevices.enumerateDevices();
 const videoDevices = devices.filter((device) => device.kind === "videoinput");
-const backCamera = videoDevices.find((device) => device.label.includes("back"));
-const deviceId = backCamera ? backCamera.deviceId : videoDevices[0].deviceId;
+const deviceId = videoDevices[0].deviceId;
 await localParticipant.setCameraEnabled(true, { deviceId });
 await localParticipant.setMicrophoneEnabled(true);
 
@@ -30,7 +29,29 @@ localVideoElement.muted = true; // 自分の映像はミュートしておく
 document.body.appendChild(localVideoElement);
 
 // ローカル映像を表示
-const videoPub = localParticipant.getTrackPublication(Track.Source.Camera);
-if (videoPub && videoPub.track) {
-  videoPub.track.attach(localVideoElement);
+const videoPubTrack = localParticipant.getTrackPublication(Track.Source.Camera)
+  ?.track;
+videoPubTrack?.attach(localVideoElement);
+
+const cameraDeviceSelect = document.getElementById(
+  "camera-device-select",
+) as HTMLSelectElement;
+if (!cameraDeviceSelect) {
+  throw new Error("camera-device-select element not found");
 }
+
+cameraDeviceSelect.addEventListener("change", async () => {
+  const selectedDeviceId = cameraDeviceSelect.value;
+  await videoPubTrack?.setDeviceId(selectedDeviceId);
+});
+
+setTimeout(async () => {
+  const devices = await navigator.mediaDevices.enumerateDevices();
+  const videoDevices = devices.filter((device) => device.kind === "videoinput");
+  cameraDeviceSelect.innerHTML = videoDevices.map((device) =>
+    `<option value="${device.deviceId}">${device.label}</option>`
+  ).join("\n");
+  if (cameraDeviceSelect.value === "") {
+    cameraDeviceSelect.value = videoDevices[0].deviceId;
+  }
+}, 1000);

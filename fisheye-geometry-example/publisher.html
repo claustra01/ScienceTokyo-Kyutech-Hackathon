@@ -4,8 +4,27 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>カメラ</title>
+    <style>
+      .camera-device-select-wraper {
+        position: fixed;
+        top: 4px;
+        left: 4px;
+        z-index: 100;
+      }
+      #camera-device-select {
+        background-color: white;
+        color: black;
+        border: none;
+        font-size: 1.5em;
+        font-weight: bold;
+        cursor: pointer;
+      }
+    </style>
   </head>
   <body>
+    <div class="camera-device-select-wraper">
+      <select id="camera-device-select"></select>
+    </div>
     <script src="livekit-publisher.ts"></script>
   </body>
 </html>
