@@ -10,54 +10,21 @@
         overflow: hidden;
       }
 
-      #display {
-        width: 100vw;
-        height: 100vh;
-        background-color: black;
-        color: white;
-        font-size: 1.5em;
-        white-space: pre-wrap;
-        overflow: hidden;
-      }
-
-      #play-button {
+      #no-attached-publisher {
+        display: block;
         position: fixed;
         inset: 0;
         display: grid;
         place-items: center;
-        background-color: transparent;
-        color: black;
-        border: none;
-        font-size: 1.5em;
-        font-weight: bold;
-        z-index: 100;
-        cursor: pointer;
-      }
-
-      .play-button-icon {
-        display: grid;
-        place-content: center;
-        width: 5rem;
-        height: 5rem;
-        background-color: #0005;
-        border-radius: 50%;
-      }
-      .play-button-icon::before {
-        content: '';
-        width: 0;
-        height: 0;
-        margin-left: 0.5rem;
-        border-top: 1rem solid transparent;
-        border-left: 1.5rem solid white;
-        border-bottom: 1rem solid transparent;
+        background-color: #000;
+        font-size: 2em;
+        color: #fff;
+        z-index: 1000;
       }
     </style>
   </head>
   <body>
-    <pre id="display"></pre>
-    <!-- <button id="play-button">
-      <div class="play-button-icon"></div>
-    </button> -->
+    <div id="no-attached-publisher">映像が送られていません</div>
     <script src="main.ts"></script>
   </body>
 </html>

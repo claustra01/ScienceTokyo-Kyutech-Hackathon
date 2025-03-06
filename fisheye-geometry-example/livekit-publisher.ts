@@ -13,7 +13,8 @@ const localVideoElement = document.createElement("video");
 localVideoElement.autoplay = true;
 localVideoElement.id = "video";
 localVideoElement.style.position = "fixed";
-localVideoElement.style.inset = "0";
+localVideoElement.style.width = "100vw";
+localVideoElement.style.height = "100vh";
 
 const room = await connectToRoom(roomName, userName);
 const localParticipant = room.localParticipant;
@@ -22,7 +23,10 @@ const localParticipant = room.localParticipant;
 const devices = await navigator.mediaDevices.enumerateDevices();
 const videoDevices = devices.filter((device) => device.kind === "videoinput");
 const deviceId = videoDevices[0].deviceId;
-await localParticipant.setCameraEnabled(true, { deviceId });
+await localParticipant.setCameraEnabled(true, {
+  deviceId,
+  resolution: { frameRate: 60, width: 1920, height: 1080 },
+});
 await localParticipant.setMicrophoneEnabled(true);
 
 localVideoElement.muted = true; // 自分の映像はミュートしておく

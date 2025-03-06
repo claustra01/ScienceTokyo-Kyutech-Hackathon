@@ -1,5 +1,12 @@
 import { type Participant, Room } from "livekit-client";
-import { getToken } from "./livekit";
+
+export const getToken = async (roomName: string, userName: string) => {
+  const res = await fetch(
+    `https://livekit-hackathon.cp20.dev/getToken?room=${roomName}&username=${userName}`,
+  );
+  const token = await res.text();
+  return token;
+};
 
 export const livekitWsUrl =
   "wss://sciencetokyo-kyutech-hackathon-bod15vue.livekit.cloud";

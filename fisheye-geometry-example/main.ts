@@ -34,7 +34,7 @@ orbitControls.enableZoom = false;
 const radius: number = 5;
 const widthSegments: number = 64;
 const heightSegments: number = 32;
-const fishEyeFOV: number = 180;
+const fishEyeFOV: number = 140;
 
 // --- 球体の生成 ---
 const geometry = createFisheyeGeometry(
