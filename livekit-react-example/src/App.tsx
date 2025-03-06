@@ -33,6 +33,14 @@ export default function App() {
       // Use the default LiveKit theme for nice styles.
       data-lk-theme="default"
       style={{ height: '100vh' }}
+      options={{
+        videoCaptureDefaults: {
+          resolution: {
+            height: 720,
+            width: 720,
+          }
+        }
+      }}
     >
       {/* Your custom component with basic video conferencing functionality. */}
       <MyVideoConference />
