@@ -3,6 +3,8 @@ import { connectToRoom, isPublisher } from "./livekit-common";
 
 export const videoElement = document.createElement("video");
 videoElement.autoplay = true;
+videoElement.width = 1080;
+videoElement.height = 1920;
 
 const noAttachedPublisher = document.getElementById("no-attached-publisher");
 if (!noAttachedPublisher) {

@@ -1,0 +1,12 @@
+{
+  "name": "demo",
+  "start_url": "/",
+  "display": "fullscreen",
+  "icons": [
+    {
+      "src": "/public/icon.png",
+      "type": "image/png",
+      "sizes": "512x512"
+    }
+  ]
+}

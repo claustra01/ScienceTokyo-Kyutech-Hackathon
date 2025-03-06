@@ -3,6 +3,7 @@ import publisherApp from "./publisher.html";
 
 Bun.serve({
   routes: {
+    "/manifest.json": new Response(await Bun.file("./manifest.json").text()),
     "/": app,
     "/publisher": publisherApp,
     "/public/*": async (c) => {

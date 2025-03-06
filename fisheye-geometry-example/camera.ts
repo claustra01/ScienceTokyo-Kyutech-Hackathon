@@ -1,4 +1,4 @@
-import { PerspectiveCamera } from "three";
+import { MathUtils, PerspectiveCamera } from "three";
 
 export const camera = new PerspectiveCamera(
   75, // 視野角

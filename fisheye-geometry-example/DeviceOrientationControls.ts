@@ -16,7 +16,7 @@ const q1 = new Quaternion(-Math.sqrt(0.5), 0, 0, Math.sqrt(0.5)); // - PI/2 arou
 const display = document.getElementById("display");
 
 const betaOffset = 0;
-const gammaOffset = -degToRad(45);
+const gammaOffset = -degToRad(70);
 
 type Orientation = {
   alpha: number;

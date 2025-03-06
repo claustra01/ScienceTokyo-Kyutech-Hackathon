@@ -23,10 +23,14 @@ const localParticipant = room.localParticipant;
 const devices = await navigator.mediaDevices.enumerateDevices();
 const videoDevices = devices.filter((device) => device.kind === "videoinput");
 const deviceId = videoDevices[0].deviceId;
-await localParticipant.setCameraEnabled(true, {
-  deviceId,
-  resolution: { frameRate: 60, width: 1920, height: 1080 },
-});
+try {
+  await localParticipant.setCameraEnabled(true, {
+    deviceId,
+    resolution: { frameRate: 60, width: 1920, height: 1080 },
+  });
+} catch (e) {
+  console.error(e);
+}
 await localParticipant.setMicrophoneEnabled(true);
 
 localVideoElement.muted = true; // 自分の映像はミュートしておく

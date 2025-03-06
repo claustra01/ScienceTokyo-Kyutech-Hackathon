@@ -9,8 +9,12 @@ import { connectToLivekitSource, videoElement } from "./livekit";
 const url = new URL(window.location.href);
 const roomName = url.searchParams.get("room");
 if (roomName === null) {
-  alert("room query parameter is required");
-  throw new Error("room query parameter is required");
+  const roomName = prompt("Enter room name");
+  if (roomName === null) {
+    throw new Error("room name is required");
+  }
+  window.location.replace(`?room=${roomName}`);
+  throw new Error("redirecting to room");
 }
 const userName = "viewer-" + Math.random().toString(36).slice(-8);
 await connectToLivekitSource(roomName, userName);
