@@ -58,7 +58,13 @@ console.log("connected to room", room.name);
 const localParticipant = room.localParticipant;
 
 // カメラとマイクを有効化
-await localParticipant.enableCameraAndMicrophone();
+const devices = await navigator.mediaDevices.enumerateDevices();
+const videoDevices = devices.filter((device) => device.kind === "videoinput");
+const backCamera = videoDevices.find((device) => device.label.includes("back"));
+console.log("video devices", videoDevices);
+const deviceId = backCamera ? backCamera.deviceId : videoDevices[0].deviceId;
+await localParticipant.setCameraEnabled(true, { deviceId });
+await localParticipant.setMicrophoneEnabled(true);
 
 // ローカル映像用のvideo要素を作成
 const localVideoEl = document.createElement("video");
