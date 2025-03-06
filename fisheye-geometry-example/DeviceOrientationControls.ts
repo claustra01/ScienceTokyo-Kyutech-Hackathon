@@ -6,6 +6,7 @@ import {
   Quaternion,
   Vector3,
 } from "three";
+import { degToRad } from "three/src/math/MathUtils.js";
 
 const zee = new Vector3(0, 0, 1);
 const euler = new Euler();
@@ -13,6 +14,9 @@ const q0 = new Quaternion();
 const q1 = new Quaternion(-Math.sqrt(0.5), 0, 0, Math.sqrt(0.5)); // - PI/2 around the x-axis
 
 const display = document.getElementById("display");
+
+const betaOffset = 0;
+const gammaOffset = -degToRad(45);
 
 type Orientation = {
   alpha: number;
@@ -98,8 +102,10 @@ class DeviceOrientationControls extends EventDispatcher {
 
     const alpha = MathUtils.degToRad(this.screenOrientation.alpha) +
       this.alphaOffset;
-    const beta = MathUtils.degToRad(this.screenOrientation.beta);
-    const gamma = MathUtils.degToRad(this.screenOrientation.gamma);
+    const beta = MathUtils.degToRad(this.screenOrientation.beta) +
+      betaOffset;
+    const gamma = MathUtils.degToRad(this.screenOrientation.gamma) +
+      gammaOffset;
     const orient = MathUtils.degToRad(window.screen.orientation.angle || 0); // this is the device's offset
 
     euler.set(beta, alpha, -gamma, "YXZ"); // 'ZXY' for the device, but 'YXZ' for us
