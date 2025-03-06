@@ -4,6 +4,7 @@
     "@ffmpeg/ffmpeg": "^0.12.15",
     "@ffmpeg/util": "^0.12.2",
     "@types/three": "^0.174.0",
+    "livekit-client": "^2.9.5",
     "three": "^0.174.0"
   },
   "name": "sciencetokyo-kyutech-hackathon",

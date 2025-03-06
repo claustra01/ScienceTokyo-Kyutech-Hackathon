@@ -3,7 +3,17 @@ import { OrbitControls } from "three/addons/controls/OrbitControls.js";
 import { createFisheyeGeometry } from "./geometry";
 import { deviceOrientationControls } from "./controls";
 import { camera } from "./camera";
-import { canvasElement, updateTextureFromVideo, videoElement } from "./video";
+import { canvasElement, updateTextureFromVideo } from "./video";
+import { connectToLivekitSource, videoElement } from "./livekit";
+
+const url = new URL(window.location.href);
+const roomName = url.searchParams.get("room");
+if (roomName === null) {
+  alert("room query parameter is required");
+  throw new Error("room query parameter is required");
+}
+const userName = "viewer-" + Math.random().toString(36).slice(-8);
+await connectToLivekitSource(roomName, userName);
 
 // シーン、カメラ、レンダラーのセットアップ
 const scene = new THREE.Scene();

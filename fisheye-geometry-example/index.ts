@@ -1,8 +1,10 @@
 import app from "./index.html";
+import publisherApp from "./publisher.html";
 
 Bun.serve({
   routes: {
     "/": app,
+    "/publisher": publisherApp,
     "/public/*": async (c) => {
       const url = new URL(c.url);
       const filePath = url.pathname.replace(/^\/public/, "./public");

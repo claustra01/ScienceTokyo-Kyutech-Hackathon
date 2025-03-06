@@ -42,14 +42,3 @@ export const updateTextureFromVideo = (
   );
   texture.needsUpdate = true;
 };
-
-export const videoElement = document.createElement("video");
-videoElement.src = "public/fisheye.mp4";
-videoElement.loop = true;
-
-const playButton = document.getElementById("play-button");
-if (playButton === null) throw new Error("play-button is null");
-playButton.addEventListener("click", () => {
-  videoElement.play();
-  playButton.style.display = "none";
-});
