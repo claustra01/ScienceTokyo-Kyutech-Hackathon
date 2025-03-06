@@ -3,11 +3,6 @@ import { connectToRoom, isPublisher } from "./livekit-common";
 
 export const videoElement = document.createElement("video");
 videoElement.autoplay = true;
-// videoElement.id = "video";
-// videoElement.style.position = "fixed";
-// videoElement.style.inset = "0";
-// videoElement.style.zIndex = "100";
-document.body.appendChild(videoElement);
 
 export const connectToLivekitSource = async (
   roomName: string,
