@@ -1,7 +1,7 @@
 import { zValidator } from "@hono/zod-validator";
 import { Hono } from "hono";
 import { cors } from "hono/cors";
-import { AccessToken, Room } from "livekit-server-sdk";
+import { AccessToken } from "livekit-server-sdk";
 import { z } from "zod";
 
 const createToken = async (room: string, username: string) => {
