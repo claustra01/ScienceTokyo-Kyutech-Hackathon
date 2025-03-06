@@ -11,38 +11,36 @@ export const updateTextureFromVideo = (
   videoElement: HTMLVideoElement,
   texture: Texture,
 ) => {
-  if (videoElement.readyState === videoElement.HAVE_ENOUGH_DATA) {
-    // Calculate crop dimensions to maintain aspect ratio
-    const videoRatio = videoElement.videoWidth / videoElement.videoHeight;
+  if (videoElement.readyState !== videoElement.HAVE_ENOUGH_DATA) return;
 
-    let sourceX = 0, sourceY = 0;
-    let sourceWidth = videoElement.videoWidth;
-    let sourceHeight = videoElement.videoHeight;
+  const videoRatio = videoElement.videoWidth / videoElement.videoHeight;
 
-    // Crop video to match canvas aspect ratio
-    if (videoRatio > 1) {
-      // Video is wider than canvas
-      sourceWidth = videoElement.videoHeight;
-      sourceX = (videoElement.videoWidth - sourceWidth) / 2;
-    } else {
-      // Video is taller than canvas
-      sourceHeight = videoElement.videoWidth;
-      sourceY = (videoElement.videoHeight - sourceHeight) / 2;
-    }
+  let sourceX = 0, sourceY = 0;
+  let sourceWidth = videoElement.videoWidth;
+  let sourceHeight = videoElement.videoHeight;
 
-    ctx.drawImage(
-      videoElement,
-      sourceX,
-      sourceY,
-      sourceWidth,
-      sourceHeight,
-      0,
-      0,
-      canvasElement.width,
-      canvasElement.height,
-    );
-    texture.needsUpdate = true;
+  if (videoRatio > 1) {
+    // Video is wider than canvas
+    sourceWidth = videoElement.videoHeight;
+    sourceX = (videoElement.videoWidth - sourceWidth) / 2;
+  } else {
+    // Video is taller than canvas
+    sourceHeight = videoElement.videoWidth;
+    sourceY = (videoElement.videoHeight - sourceHeight) / 2;
   }
+
+  ctx.drawImage(
+    videoElement,
+    sourceX,
+    sourceY,
+    sourceWidth,
+    sourceHeight,
+    0,
+    0,
+    canvasElement.width,
+    canvasElement.height,
+  );
+  texture.needsUpdate = true;
 };
 
 export const videoElement = document.createElement("video");
