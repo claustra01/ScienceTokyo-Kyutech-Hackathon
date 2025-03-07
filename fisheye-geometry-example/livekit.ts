@@ -34,11 +34,10 @@ export const connectToLivekitSource = async (
 
   room.on("participantDisconnected", (participant) => {
     if (!isPublisher(participant)) return;
-    const publication = [...participant.trackPublications]
-      .find(([_, p]) => p.track && p.source === Track.Source.Camera);
+    const publication = participant.getTrackPublication(Track.Source.Camera);
     if (!publication) return;
-    const [_, pub] = publication;
-    pub.track?.detach(videoElement);
+    if (!publication.track) return;
+    publication.track.detach(videoElement);
     detach();
   });
 
@@ -55,20 +54,29 @@ export const connectToLivekitSource = async (
       voiceIndicator.classList.remove("active");
     }
   }, 100);
+
+  setInterval(() => {
+    room.remoteParticipants.forEach(handleParticipantConnected);
+  }, 1000);
 };
+
+let lastAttachedTrack: Track | null = null;
 
 const handleParticipantConnected = (participant: Participant) => {
   console.log("participant connected:", participant.identity);
   if (!isPublisher(participant)) return;
-  console.log("participant is a publisher");
 
-  const publication = [...participant.trackPublications]
-    .find(([_, p]) => p.track && p.source === Track.Source.Camera);
+  const publication = participant.getTrackPublication(Track.Source.Camera);
   if (publication === undefined) return;
+  if (publication.track === undefined) return;
 
-  const [_, pub] = publication;
-  console.log(pub.track);
+  console.log(publication.track);
 
-  pub.track?.attach(videoElement);
+  if (publication.trackSid === lastAttachedTrack?.sid) return;
+  if (lastAttachedTrack) {
+    lastAttachedTrack.detach(videoElement);
+  }
+  publication.track.attach(videoElement);
+  lastAttachedTrack = publication.track;
   attach();
 };

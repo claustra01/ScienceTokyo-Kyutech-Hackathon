@@ -24,49 +24,49 @@ if (!voiceIndicator) throw new Error("voice-indicator element not found");
 const room = await connectToRoom(roomName, userName);
 
 const handleParticipantConnected = (participant: Participant) => {
-  const publications = [...participant.trackPublications]
-    .filter(([_, p]) => p.track && p.source === Track.Source.Microphone);
+  const publication = participant.getTrackPublication(Track.Source.Microphone);
+  if (!publication) return;
+  if (!publication.track) return;
 
-  for (const pub of publications) {
-    const existing = document.getElementById(
-      `audio-${pub[1].track?.sid}`,
-    ) as HTMLAudioElement | null;
-    if (existing !== null) continue;
-    const audioElement = document.createElement("audio");
-    audioElement.autoplay = true;
-    audioElement.id = `audio-${pub[1].track?.sid}`;
-    document.body.appendChild(audioElement);
-    pub[1].track?.attach(audioElement);
+  if (publication.track.attachedElements.length > 0) return;
 
-    // Audio visualization using AudioContext
-    const audioContext = new AudioContext();
-    const analyser = audioContext.createAnalyser();
-    const source = audioContext.createMediaStreamSource(
-      pub[1].track?.mediaStream as MediaStream,
-    );
-    source.connect(analyser);
-    analyser.fftSize = 256;
+  const existing = document.getElementById(`audio-${publication.track?.sid}`);
+  if (existing) return;
 
-    const updateIndicator = () => {
-      const dataArray = new Uint8Array(analyser.frequencyBinCount);
-      analyser.getByteFrequencyData(dataArray);
+  const audioElement = document.createElement("audio");
+  audioElement.autoplay = true;
+  audioElement.id = `audio-${publication.track?.sid}`;
+  document.body.appendChild(audioElement);
+  publication.track?.attach(audioElement);
 
-      // Calculate average volume
-      const average = dataArray.reduce((acc, val) => acc + val, 0) /
-        dataArray.length;
+  // Audio visualization using AudioContext
+  const audioContext = new AudioContext();
+  const analyser = audioContext.createAnalyser();
+  const source = audioContext.createMediaStreamSource(
+    publication.track?.mediaStream as MediaStream,
+  );
+  source.connect(analyser);
+  analyser.fftSize = 256;
 
-      // Show/hide indicator based on volume threshold
-      if (average > 10) {
-        voiceIndicator.classList.add("active");
-      } else {
-        voiceIndicator.classList.remove("active");
-      }
+  const updateIndicator = () => {
+    const dataArray = new Uint8Array(analyser.frequencyBinCount);
+    analyser.getByteFrequencyData(dataArray);
 
-      requestAnimationFrame(updateIndicator);
-    };
+    // Calculate average volume
+    const average = dataArray.reduce((acc, val) => acc + val, 0) /
+      dataArray.length;
 
-    updateIndicator();
-  }
+    // Show/hide indicator based on volume threshold
+    if (average > 10) {
+      voiceIndicator.classList.add("active");
+    } else {
+      voiceIndicator.classList.remove("active");
+    }
+
+    requestAnimationFrame(updateIndicator);
+  };
+
+  updateIndicator();
 };
 
 room.on("participantConnected", handleParticipantConnected);
@@ -76,21 +76,20 @@ room.on("trackPublished", (_, participant) => {
 });
 
 room.on("participantDisconnected", (participant) => {
-  const publications = [...participant.trackPublications]
-    .filter(([_, p]) => p.track && p.source === Track.Source.Microphone);
-  for (const pub of publications) {
-    const audioElement = document.getElementById(
-      `audio-${pub[1].track?.sid}`,
-    ) as HTMLAudioElement | null;
-    if (!audioElement) {
-      console.error("audio element not found: " + pub[1].track?.sid);
-      continue;
-    }
-    pub[1].track?.detach(audioElement);
-  }
+  const publication = participant.getTrackPublication(Track.Source.Microphone);
+  if (!publication) return;
+  if (!publication.track) return;
+  publication.track.attachedElements.forEach((element) => {
+    element.remove();
+    publication.track?.detach(element);
+  });
 });
 
 room.remoteParticipants.forEach(handleParticipantConnected);
+
+setInterval(() => {
+  room.remoteParticipants.forEach(handleParticipantConnected);
+}, 1000);
 
 const localParticipant = room.localParticipant;
 
